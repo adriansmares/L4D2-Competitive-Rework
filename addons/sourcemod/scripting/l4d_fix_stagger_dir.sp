@@ -48,15 +48,14 @@ methodmap GameDataWrapper < GameData {
 int g_iOffs_m_PlayerAnimState;
 int g_iOffs_m_flEyeYaw;
 
-methodmap Address {}
-methodmap PlayerAnimStateEx < Address
+methodmap PlayerAnimStateEx
 {
 	public static PlayerAnimStateEx FromPlayer(int client) {
 		return view_as<PlayerAnimStateEx>(GetEntData(client, g_iOffs_m_PlayerAnimState));
 	}
 
 	property float m_flEyeYaw {
-		public set(float flAimYaw) { StoreToAddress(this + view_as<Address>(g_iOffs_m_flEyeYaw), flAimYaw, NumberType_Int32); }
+		public set(float flAimYaw) { StoreToAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(g_iOffs_m_flEyeYaw), flAimYaw, NumberType_Int32); }
 	}
 }
 

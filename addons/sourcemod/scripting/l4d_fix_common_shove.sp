@@ -68,21 +68,21 @@ methodmap ZombieBotBody
 	}
 
 	property int m_activity {
-		public get() { return LoadFromAddress(view_as<Address>(this) + view_as<Address>(80), NumberType_Int32); }
-		public set(int act) { StoreToAddress(view_as<Address>(this) + view_as<Address>(80), act, NumberType_Int32); }
+		public get() { return LoadFromAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(80), NumberType_Int32); }
+		public set(int act) { StoreToAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(80), act, NumberType_Int32); }
 	}
 	
 	property ActivityType m_activityType {
-		public get() { return LoadFromAddress(view_as<Address>(this) + view_as<Address>(84), NumberType_Int32); }
-		public set(ActivityType flags) { StoreToAddress(view_as<Address>(this) + view_as<Address>(84), flags, NumberType_Int32); }
+		public get() { return LoadFromAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(84), NumberType_Int32); }
+		public set(ActivityType flags) { StoreToAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(84), flags, NumberType_Int32); }
 	}
 }
 
 methodmap ZombieBotLocomotion
 {
 	property Address m_ladder {
-		public get() { return LoadFromAddress(view_as<Address>(this) + view_as<Address>(g_iOffs_ZombieBotLocomotion__m_ladder), NumberType_Int32); }
-		public set(Address p) { StoreToAddress(view_as<Address>(this) + view_as<Address>(g_iOffs_ZombieBotLocomotion__m_ladder), p, NumberType_Int32); }
+		public get() { return LoadAddressFromAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(g_iOffs_ZombieBotLocomotion__m_ladder)); }
+		public set(Address p) { StoreToAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(g_iOffs_ZombieBotLocomotion__m_ladder), view_as<int>(p), NumberType_Int32); }
 	}
 }
 
@@ -299,8 +299,8 @@ ConVar CreateConVarHook(const char[] name,
 	
 	Call_StartFunction(INVALID_HANDLE, callback);
 	Call_PushCell(cv);
-	Call_PushNullString();
-	Call_PushNullString();
+	Call_PushString("");
+	Call_PushString("");
 	Call_Finish();
 	
 	cv.AddChangeHook(callback);

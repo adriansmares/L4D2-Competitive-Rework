@@ -47,7 +47,7 @@ static const int
 	};
 
 Address
-	g_pBullets[BULLET_MAX_SIZE] = {Address_Null, ...},
+	g_pBullets[BULLET_MAX_SIZE],
 	g_pDegree = Address_Null,
 	g_pFactor = Address_Null,
 	g_pCenterPellet = Address_Null;
