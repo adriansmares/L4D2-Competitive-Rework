@@ -424,5 +424,5 @@ IntervalTimer CTankRock__GetReleaseTimer(int rock)
 	if (s_iOffs_m_releaseTimer == -1)
 		s_iOffs_m_releaseTimer = FindSendPropInfo("CBaseCSGrenadeProjectile", "m_vInitialVelocity") + 36;
 	
-	return view_as<IntervalTimer>(GetEntityAddress(rock) + view_as<Address>(s_iOffs_m_releaseTimer));
+	return view_as<IntervalTimer>(view_as<int>(GetEntityAddress(rock) + view_as<Address>(s_iOffs_m_releaseTimer)));
 }

@@ -41,7 +41,7 @@ methodmap AnimState
 		return view_as<AnimState>(ptr);
 	}
 	public bool GetFlag(AnimStateFlag flag) {
-		return view_as<bool>(LoadFromAddress(view_as<Address>(this) + view_as<Address>(m_bCharged) + view_as<Address>(flag), NumberType_Int8));
+		return view_as<bool>(LoadFromAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(m_bCharged) + view_as<Address>(view_as<int>(flag)), NumberType_Int8));
 	}
 }
 
@@ -550,8 +550,8 @@ ConVar CreateConVarHook(const char[] name,
 	
 	Call_StartFunction(INVALID_HANDLE, callback);
 	Call_PushCell(cv);
-	Call_PushNullString();
-	Call_PushNullString();
+	Call_PushString("");
+	Call_PushString("");
 	Call_Finish();
 	
 	cv.AddChangeHook(callback);

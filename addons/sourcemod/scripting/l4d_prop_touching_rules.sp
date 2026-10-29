@@ -56,7 +56,7 @@ public void OnPluginStart()
 
 	g_Block_MoveAwayMassThres = new MemoryBlock(4);
 	g_Patch_MoveAwayMassThres = gd.CreatePatchOrFail("prop_moveaway_mass_thres", true);
-	StoreToAddress(g_Patch_MoveAwayMassThres.Address + view_as<Address>(4), g_Block_MoveAwayMassThres.Address, NumberType_Int32, false);
+	StoreToAddress(g_Patch_MoveAwayMassThres.Address + view_as<Address>(4), view_as<int>(g_Block_MoveAwayMassThres.Address), NumberType_Int32, false);
 
 	g_Patch_MoveAway = gd.CreatePatchOrFail("prop_medium_touching_moveaway", false);
 	g_Patch_HeavyMoveAbove = gd.CreatePatchOrFail("prop_heavy_touching_move_above", false);
@@ -195,8 +195,8 @@ stock ConVar CreateConVarHook(const char[] name,
 	
 	Call_StartFunction(INVALID_HANDLE, callback);
 	Call_PushCell(cv);
-	Call_PushNullString();
-	Call_PushNullString();
+	Call_PushString("");
+	Call_PushString("");
 	Call_Finish();
 	
 	cv.AddChangeHook(callback);

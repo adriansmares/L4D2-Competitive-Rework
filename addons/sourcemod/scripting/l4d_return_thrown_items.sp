@@ -25,10 +25,10 @@ methodmap CountdownTimer {
 		return GetGameTime() >= this.m_timestamp;
 	}
 	property float m_duration {
-		public get() { return LoadFromAddress(view_as<Address>(this) + view_as<Address>(4), NumberType_Int32); }
+		public get() { return LoadFromAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(4), NumberType_Int32); }
 	}
 	property float m_timestamp {
-		public get() { return LoadFromAddress(view_as<Address>(this) + view_as<Address>(8), NumberType_Int32); }
+		public get() { return LoadFromAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(8), NumberType_Int32); }
 	}
 }
 
@@ -116,7 +116,7 @@ CountdownTimer GetWeaponDropTimer(int weapon)
 		s_iOffs_m_dropTimer = L4D_IsEngineLeft4Dead1() ? 
 				FindSendPropInfo("CTerrorWeapon", "m_flVsLastSwingTime") + 20 : FindSendPropInfo("CTerrorWeapon", "m_nUpgradedPrimaryAmmoLoaded") + 16;
 	
-	return view_as<CountdownTimer>(GetEntityAddress(weapon) + view_as<Address>(s_iOffs_m_dropTimer));
+	return view_as<CountdownTimer>(view_as<int>(GetEntityAddress(weapon) + view_as<Address>(s_iOffs_m_dropTimer)));
 }
 
 int GetWeaponDroppingPlayer(int weapon)
