@@ -38,7 +38,7 @@ public Plugin myinfo =
 
 methodmap TerrorNavArea {
 	public TerrorNavArea(const float vPos[3]) {
-		return view_as<TerrorNavArea>(L4D_GetNearestNavArea(vPos));
+		return view_as<TerrorNavArea>(view_as<int>(L4D_GetNearestNavArea(vPos)));
 	}
 	public bool Valid() {
 		return this != view_as<TerrorNavArea>(0);
@@ -47,7 +47,7 @@ methodmap TerrorNavArea {
 		return (this.m_spawnAttributes & bits) == bits;
 	}
 	property int m_spawnAttributes {
-		public get() { return L4D_GetNavArea_SpawnAttributes(view_as<Address>(this)); }
+		public get() { return L4D_GetNavArea_SpawnAttributes(view_as<Address>(view_as<int>(this))); }
 	}
 }
 
@@ -94,7 +94,7 @@ void LoadSDK()
 	if (!hPatch.Enable()) SetFailState("Failed to enable patch \""...KEY_TRACEHEIGHT_PATCH..."\"");
 	
 	// replace with custom memory
-	StoreToAddress(hPatch.Address + view_as<Address>(4), GetAddressOfCell(g_flTraceHeight), NumberType_Int32);
+	StoreToAddress(hPatch.Address + view_as<Address>(4), view_as<int>(GetAddressOfCell(g_flTraceHeight)), NumberType_Int32);
 	
 	DynamicDetour hDetour = DynamicDetour.FromConf(conf, KEY_DETONATE);
 	if (!hDetour)
@@ -575,8 +575,8 @@ ConVar CreateConVarHook(const char[] name,
 	
 	Call_StartFunction(INVALID_HANDLE, callback);
 	Call_PushCell(cv);
-	Call_PushNullString();
-	Call_PushNullString();
+	Call_PushString("");
+	Call_PushString("");
 	Call_Finish();
 	
 	cv.AddChangeHook(callback);

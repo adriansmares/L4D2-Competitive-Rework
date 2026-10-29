@@ -95,10 +95,10 @@ methodmap AnimState
 	}
 	public void ResetMainActivity() { SDKCall(g_hSDKCall_ResetMainActivity, this); }
 	public bool GetFlag(AnimStateFlag flag) {
-		return view_as<bool>(LoadFromAddress(view_as<Address>(this) + view_as<Address>(m_bCharged) + view_as<Address>(flag), NumberType_Int8));
+		return view_as<bool>(LoadFromAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(m_bCharged) + view_as<Address>(view_as<int>(flag)), NumberType_Int8));
 	}
 	public void SetFlag(AnimStateFlag flag, bool val) {
-		StoreToAddress(view_as<Address>(this) + view_as<Address>(m_bCharged) + view_as<Address>(flag), view_as<int>(val), NumberType_Int8);
+		StoreToAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(m_bCharged) + view_as<Address>(view_as<int>(flag)), view_as<int>(val), NumberType_Int8);
 	}
 }
 

@@ -92,25 +92,24 @@ methodmap GameDataWrapper < GameData {
 	}
 }
 
-methodmap Address {}
 
 #if DEBUG
 int g_iOffs_m_nMainPathAreaCount;
-methodmap CEscapeRoute < Address
+methodmap CEscapeRoute
 {
 	public CEscapeRoute(int entity) {
-		return view_as<CEscapeRoute>(GetEntityAddress(entity));
+		return view_as<CEscapeRoute>(view_as<int>(GetEntityAddress(entity)));
 	}
 	
 	public TerrorNavArea GetMainPathArea(int index) {
-		return LoadFromAddress(this
+		return LoadFromAddress(view_as<Address>(view_as<int>(this))
 							+ view_as<Address>(g_iOffs_m_nMainPathAreaCount + 8)
 							+ view_as<Address>(index * 4),
 							NumberType_Int32);
 	}
 	
 	property int m_nMainPathAreaCount {
-		public get() { return LoadFromAddress(this
+		public get() { return LoadFromAddress(view_as<Address>(view_as<int>(this))
 										+ view_as<Address>(g_iOffs_m_nMainPathAreaCount),
 										NumberType_Int32); }
 	}
@@ -119,10 +118,10 @@ bool g_bEscapeRouteChecked = false;
 ArrayList g_SavedEscapeRouteAreas;
 
 int g_offs_m_id;
-methodmap TerrorNavArea < Address
+methodmap TerrorNavArea
 {
 	public int GetID() {
-		return LoadFromAddress(this + view_as<Address>(g_offs_m_id), NumberType_Int32);
+		return LoadFromAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(g_offs_m_id), NumberType_Int32);
 	}
 }
 #endif
@@ -211,7 +210,7 @@ MRESReturn DTR_Checkpoint_GetSpawnPosition_Post(Address pThis, DHookReturn hRetu
 	//   GetSpawnPosition always computes a random position within start safe area.
 	//   The following makes it always return the largest area instead.
 	TerrorNavArea area = SDKCall(g_call_Checkpoint_GetLargestArea, pThis);
-	if (area == Address_Null)
+	if (view_as<int>(area) == 0)
 		return MRES_Ignored;
 
 #if DEBUG
@@ -221,7 +220,7 @@ MRESReturn DTR_Checkpoint_GetSpawnPosition_Post(Address pThis, DHookReturn hRetu
 	if (!hParams.IsNull(1))
 	{
 		float pos[3];
-		L4D_GetNavAreaCenter(area, pos);
+		L4D_GetNavAreaCenter(view_as<Address>(view_as<int>(area)), pos);
 		hParams.SetVector(1, pos);
 	}
 

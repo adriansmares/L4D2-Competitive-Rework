@@ -96,7 +96,7 @@ any Direct_ITimer_GetTimestamp(Handle plugin, int numParams) // Native "ITimer_G
 */
 float __ITimer_GetTimestamp(IntervalTimer timer)
 {
-    return LoadFromAddress(view_as<Address>(timer) + view_as<Address>(4), NumberType_Int32);
+    return LoadFromAddress(view_as<Address>(view_as<int>(timer)) + view_as<Address>(4), NumberType_Int32);
 }
 
 IntervalTimer GetShovingTimer(int client)
@@ -105,5 +105,5 @@ IntervalTimer GetShovingTimer(int client)
     if ( s_iOffs_ShovingTimer == -1 )
         s_iOffs_ShovingTimer = FindSendPropInfo("CTerrorPlayer", "m_customAbility") + 164;
 	
-    return view_as<IntervalTimer>(GetEntityAddress(client) + view_as<Address>(s_iOffs_ShovingTimer));
+    return view_as<IntervalTimer>(view_as<int>(GetEntityAddress(client) + view_as<Address>(s_iOffs_ShovingTimer)));
 }

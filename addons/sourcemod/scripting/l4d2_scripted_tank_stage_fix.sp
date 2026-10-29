@@ -27,15 +27,15 @@ int g_iOffs_m_tankSpawning, g_iOffs_m_iTankCount;
 methodmap EventManager
 {
 	public EventManager(Address ptr) {
-		return view_as<EventManager>(ptr);
+		return view_as<EventManager>(view_as<int>(ptr));
 	}
 	
 	property bool m_tankSpawning {
 		public get() {
-			return LoadFromAddress(view_as<Address>(this) + view_as<Address>(g_iOffs_m_tankSpawning), NumberType_Int8);
+			return LoadFromAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(g_iOffs_m_tankSpawning), NumberType_Int8);
 		}
 		public set(bool val) {
-			StoreToAddress(view_as<Address>(this) + view_as<Address>(g_iOffs_m_tankSpawning), val, NumberType_Int8);
+			StoreToAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(g_iOffs_m_tankSpawning), val, NumberType_Int8);
 		}
 	}
 };
@@ -43,15 +43,15 @@ methodmap EventManager
 methodmap CDirector
 {
 	public CDirector(Address ptr) {
-		return view_as<CDirector>(ptr);
+		return view_as<CDirector>(view_as<int>(ptr));
 	}
 	
 	property int m_iTankCount {
 		public get() {
-			return LoadFromAddress(view_as<Address>(this) + view_as<Address>(g_iOffs_m_iTankCount), NumberType_Int32);
+			return LoadFromAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(g_iOffs_m_iTankCount), NumberType_Int32);
 		}
 		public set(int val) {
-			StoreToAddress(view_as<Address>(this) + view_as<Address>(g_iOffs_m_iTankCount), val, NumberType_Int32);
+			StoreToAddress(view_as<Address>(view_as<int>(this)) + view_as<Address>(g_iOffs_m_iTankCount), val, NumberType_Int32);
 		}
 	}
 };
