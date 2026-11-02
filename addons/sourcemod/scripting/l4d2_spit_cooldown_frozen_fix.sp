@@ -45,7 +45,7 @@ void Event_AbilityUse(Event event, const char[] name, bool dontBroadcast)
 
 public void OnGameFrame()
 {
-	while (g_hWaitList.Length && GetGameTime() >= g_hWaitList.Get(0, 1))
+	while (g_hWaitList.Length && GetGameTime() >= view_as<float>(g_hWaitList.Get(0, 1)))
 	{
 		CheckSpitAbility(g_hWaitList.Get(0, 0));
 		g_hWaitList.Erase(0);
