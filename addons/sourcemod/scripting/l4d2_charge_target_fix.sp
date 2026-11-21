@@ -217,7 +217,7 @@ void Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 	if (attacker == -1)
 		return;
 	
-	if (L4D2_IsInQueuedPummel(attacker) && L4D2_GetQueuedPummelVictim(attacker) == client)
+	if (IsClientInGame(attacker) && L4D2_IsInQueuedPummel(attacker) && L4D2_GetQueuedPummelVictim(attacker) == client)
 	{
 		int ability = GetEntPropEnt(attacker, Prop_Send, "m_customAbility");
 		SetEntPropFloat(ability, Prop_Send, "m_nextActivationTimer", 0.2, 0);
@@ -298,7 +298,10 @@ void Event_ChargerKilled(Event event, const char[] name, bool dontBroadcast)
 	
 	int victim = g_iChargeVictim[client];
 	if (victim == -1)
+	{
+		ForgetCharger(client);
 		return;
+	}
 	
 	if (~g_iChargerCollision & CHARGER_COLLISION_GETUP)
 	{
@@ -314,8 +317,7 @@ void Event_ChargerKilled(Event event, const char[] name, bool dontBroadcast)
 		g_bNotSolid[victim] = false;
 	}
 	
-	g_iChargeVictim[client] = -1;
-	g_iChargeAttacker[victim] = -1;
+	ForgetCharger(client);
 }
 
 void OnNextFrame_LongChargeKnockdown(int userid)
@@ -454,6 +456,7 @@ public void L4D2_OnStartCarryingVictim_Post(int victim, int attacker)
 	if (!IsPlayerAlive(victim))
 		return;
 	
+	ForgetCharger(attacker, victim);
 	g_iChargeVictim[attacker] = victim;
 	g_iChargeAttacker[victim] = attacker;
 }
@@ -466,6 +469,7 @@ public void L4D2_OnSlammedSurvivor_Post(int victim, int attacker, bool bWallSlam
 	if (!IsPlayerAlive(victim))
 		return;
 	
+	ForgetCharger(attacker, victim);
 	g_iChargeVictim[attacker] = victim;
 	g_iChargeAttacker[victim] = attacker;
 	
@@ -577,6 +581,33 @@ void KnockdownPlayer(int client, int reason)
 {
 	SetEntProp(client, Prop_Send, "m_knockdownReason", reason);
 	SetEntPropFloat(client, Prop_Send, "m_knockdownTimer", GetGameTime(), 0);
+}
+
+public void OnClientDisconnect_Post(int client)
+{
+	ForgetCharger(client);
+}
+
+// Forget every Survivor recorded for this Charger except `keep`, not only g_iChargeVictim[charger]:
+// a grab that ended without a pummel or the Charger's death is never cleared otherwise, which keeps
+// blocking attacks on that Survivor and reads a Charger that may have left by the time they die.
+void ForgetCharger(int charger, int keep = -1)
+{
+	for (int i = 1; i <= MaxClients; ++i)
+	{
+		if (i == keep || g_iChargeAttacker[i] != charger)
+			continue;
+		
+		if (g_bNotSolid[i])
+		{
+			if (IsClientInGame(i))
+				SetPlayerSolid(i, true);
+			g_bNotSolid[i] = false;
+		}
+		g_iChargeAttacker[i] = -1;
+	}
+	
+	g_iChargeVictim[charger] = -1;
 }
 
 void SetPlayerSolid(int client, bool solid)
