@@ -24,7 +24,7 @@
 #include <sourcemod>
 #include <sdktools>
 
-#define PLUGIN_VERSION "3.8.1"
+#define PLUGIN_VERSION "3.8.2"
 
 public Plugin myinfo =
 {
@@ -384,6 +384,11 @@ int ExtractCarName(const char[] sName, const char[] sCompare, char[] sBuffer, in
 		// Compare string is before spilt delimiter.
 		strcopy(sBuffer, iSize, sName[identLen+1]);
 		return 1;
+	}
+	
+	if (sName[identLen] != '\0') {
+		// Another set named by appending to the identifier, e.g. "relay_caralarm_on2".
+		return 0;
 	}
 	
 	// Format 3:
